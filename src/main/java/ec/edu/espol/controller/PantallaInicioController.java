@@ -30,12 +30,14 @@ public class PantallaInicioController implements Initializable {
 
     @FXML
     private void playClicked(MouseEvent event) {
+        String filas1 = filas.getText();
+        String columnas1 = columnas.getText();
         try{
 
             FXMLLoader fxmlloader = App.loadFXMLLoader("juego");  
             App.setRoot(fxmlloader);
-            //JuegoController jc = fxmlloader.getController();  
-            
+            JuegoController jc = fxmlloader.getController();  
+            jc.setMatrix(filas1, columnas1);
         }
         catch(IOException ex){
             Alert a = new Alert(Alert.AlertType.ERROR, "No se pudo abrir el archivo fxml");
