@@ -9,108 +9,115 @@ import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.input.MouseButton;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 
-public class Celda extends JPanel implements MouseListener, Runnable {
+public class Celda extends JButton implements MouseListener, Runnable {
     public Celda up, down, left, right;
-    long startTime;
     private static final Color color = new Color(255, 255, 255);
-     private JLabel letra;
-    private final int row;
-    private final int column;
- 
+    private JLabel letra;
+    private  int row;
+    private  int column;
+     private final Celda celdas[][];
     private boolean neighboursSet = false; // QUESTION MARK ?
-    Stack<Celda> celdasRecorridas = new Stack<>();
     
-    public Celda(int row, int column, JLabel letra) {
+    public Celda(int row, int column, JLabel letra, Celda[][] celdas) {
         this.row = row;
         this.column = column;
-        this.letra = letra;
-        this.setSize(new Dimension(20, 20));
         this.setBackground(color);
+        this.letra = letra;
+        this.celdas = celdas;
         this.addMouseListener(this);
-        //this.setNeighbours();
+        this.setNeighbours();
+    }
+    
+    public void setNeighbours() {
+        try {
+            up = celdas[row - 1][column];
+        } catch (Exception e) {
+            up = null;
+        }
+        try {
+            down = celdas[row + 1][column];
+        } catch (Exception e) {
+            down = null;
+        }
+        try {
+            left = celdas[row][column - 1];
+        } catch (Exception e) {
+            left = null;
+        }
+        try {
+            right = celdas[row][column + 1];
+        } catch (Exception e) {
+            right = null;
+        }
+    }
+    
+
+    public JLabel getLetra() {
+        return letra;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public int getColumn() {
+        return column;
+    }
+    
+    public void setLetra(JLabel letra){
+        this.letra = letra;
+    }
+
+    public void setRow(int row) {
+        this.row = row;
+    }
+
+    public void setColumn(int column) {
+        this.column = column;
     }
     
     private boolean isPainted(Color color) {
         return this.getBackground().equals(color);
     }
-
-    public JLabel getLetra() {
-        return letra;
-    }
     
     
     @Override
-    public void mouseClicked(MouseEvent e) {
-        /*
-        Stack<Celda> celdasRecorridas = new Stack<>();
-        if(e.getClickCount() == 1){
-            e.getComponent().setBackground(new java.awt.Color(147, 207, 250));
-            celdasRecorridas.push(this);
-        }
-        else if(e.getClickCount() == 2){ // E LLEGUEMOS A E        
-            System.out.println("Double clicked");
-
-            while (!celdasRecorridas.peek().equals(this)) { 
-                if (this.up != null && this.up.equals(this)) {
-                    celdasRecorridas.push(this.up); // recordando
-                }
-                if (this.down != null && this.down.equals(this)) {
-                    celdasRecorridas.push(this.down); // recordando
-                }
-                if (this.left != null && this.left.equals(this)) {
-                    celdasRecorridas.push(this.left); // recordando
-                }
-                if (this.right != null && this.right.equals(this)) {
-                    celdasRecorridas.push(this.right); // recordando
-                }
-            }
-        }
-        */  
+    public void mouseClicked(MouseEvent e) { 
     }
     
-    
-
-    
+ 
 
     @Override
-    public void mousePressed(MouseEvent e) {
-        e.getComponent().setBackground(new java.awt.Color(147, 207, 250));
-        celdasRecorridas.push(this);
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        while (!celdasRecorridas.peek().equals(this)) { // NO FUNCIONA CON DIAGONALES
-            Celda currentCelda = celdasRecorridas.pop();
-            if (currentCelda.up != null && !currentCelda.up.equals(this)) {
-                celdasRecorridas.push(this.up); // recordando
-            }
-            if (currentCelda.down != null && currentCelda.down.equals(this)) {
-                celdasRecorridas.push(this.down); // recordando
-            }
-            if (currentCelda.left != null && currentCelda.left.equals(this)) {
-                celdasRecorridas.push(this.left); // recordando
-            }
-            if (currentCelda.right != null && currentCelda.right.equals(this)) {
-                celdasRecorridas.push(this.right); // recordando
-            }
+    public void mouseEntered(MouseEvent e) {
+        if(!e.getComponent().getBackground().equals(Color.red)){
+            e.getComponent().setBackground(Color.yellow);
         }
     }
 
     @Override
-    public void mouseEntered(MouseEvent e) {       
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {       
+    public void mouseExited(MouseEvent e) {
+        if(!e.getComponent().getBackground().equals(Color.red)){
+            e.getComponent().setBackground(Color.WHITE);
+        }
     }
 
     @Override
     public void run() {   
+        
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+       
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
         
     }
     
