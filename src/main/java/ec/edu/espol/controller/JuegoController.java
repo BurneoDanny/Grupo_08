@@ -2,6 +2,7 @@
 package ec.edu.espol.controller;
 
 import ec.edu.espol.model.Celda;
+import ec.edu.espol.util.Util;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -9,6 +10,8 @@ import javafx.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URL;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.Stack;
@@ -62,6 +65,7 @@ public class JuegoController implements Initializable {
         this.columnas = columnas;
         setMatrix(filas,columnas);
         llenarDeLetras();
+        colocarPalabras();
     }
     
      private void setMatrix(String filas, String columnas){       
@@ -93,7 +97,7 @@ public class JuegoController implements Initializable {
         }
     }
      
-     private void clickLetra(Celda celda){   
+    private void clickLetra(Celda celda){   
         for (int i=0;i<celdas.length;i++){
             for(int j=0;j<celdas[0].length;j++){ 
                 firstCeldaClicked.push(celdas[i][j]);
@@ -213,21 +217,57 @@ public class JuegoController implements Initializable {
         }      
     }
      
-      private void ComprobarPalabra(Stack<Celda> palabra){
-        while(!palabra.isEmpty()){
-            System.out.println(palabra.pop().getText());
-        }
-        // DESPUES DE COMPROBAR LA PALABRA DEBERIA SUCEDER LO SIGUIENTE
-        /*
-        for (int m = 0; m < Integer.parseInt(filas); m++) {
-            for (int n = 0; n < Integer.parseInt(columnas); n++) {
-                celdas[m][n].setBackground(new Color(255, 255, 255));
+    
+    private void colocarPalabras(){       
+        Queue<String> palabras = Util.readFile("src/main/resources/Palabras/palabras.txt");
+        Queue<String> finalWords =  new PriorityQueue();
+        while(!palabras.isEmpty()){
+            if(palabras.peek().length()<= celdas.length || palabras.peek().length()<= celdas[0].length){
+                finalWords.offer(palabras.poll());         
             }
-        }  
-        */
+            else{
+                palabras.poll();
+            }
+        }
+        while(!finalWords.isEmpty()){
+            Random numeroDeRepeticiones = new Random();
+            int numero = numeroDeRepeticiones.nextInt(2);
+            for(int i = 0; i<numero; i++){
+                Random formaAleatoria = new Random();
+                int numero2 = formaAleatoria.nextInt(6);
+                if(numero2 == 0){
+                    formaVerticalNormal(finalWords.poll());
+                }
+                else if(numero2 == 1){
+                }
+                else if(numero2 == 2){
+                }
+                else if(numero2 == 3){
+                }
+                else if(numero2 == 4){
+                }
+                else{
+
+                }
+            }  
+        }
+          
+    }
+    
+    private void formaVerticalNormal(String palabra){
+        
+        Random posicionAleatoria = new Random();
+        int posicionFila = posicionAleatoria.nextInt(celdas.length);
+        int posicionColumna = posicionAleatoria.nextInt(celdas[0].length);
+        
+        for(int i=0; i<palabra.length(); i++){  
+            
+            celdas[posicionFila+1][posicionColumna].setText(""+palabra.charAt(i));
+            celdas[posicionFila+1][posicionColumna].setLetra(new JLabel (""+palabra.charAt(i)));
+        }
     }
       
-    public void llenarDeLetras() {
+    private void llenarDeLetras() {
         //este arreglo ayuda a poner las letras del abecedario
         String abc[]={"A","B","C","D","E","F","G","H","I","J","K","L","M","N","Ñ","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
         Random random = new Random();
@@ -240,6 +280,20 @@ public class JuegoController implements Initializable {
                 }
             }
         }
+    }   
+    
+    private void ComprobarPalabra(Stack<Celda> palabra){
+        while(!palabra.isEmpty()){
+            System.out.println(palabra.pop().getText());
+        }
+        // DESPUES DE COMPROBAR LA PALABRA DEBERIA SUCEDER LO SIGUIENTE
+        /*
+        for (int m = 0; m < Integer.parseInt(filas); m++) {
+            for (int n = 0; n < Integer.parseInt(columnas); n++) {
+                celdas[m][n].setBackground(new Color(255, 255, 255));
+            }
+        }  
+        */
     }
      
     

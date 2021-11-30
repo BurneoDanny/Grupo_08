@@ -106,10 +106,7 @@ public class Celda extends Button implements MouseListener, Runnable {
         }*/
         if(!this.getStyle().equals(colorRed)){
             this.setStyle(colorYellow);
-        }
-        
-        
-        
+        }  
     }
 
     @Override
