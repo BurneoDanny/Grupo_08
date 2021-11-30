@@ -8,15 +8,20 @@ import java.awt.event.MouseListener;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.control.Button;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.Background;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 
-public class Celda extends JButton implements MouseListener, Runnable {
+public class Celda extends Button implements MouseListener, Runnable {
     public Celda up, down, left, right;
-    private static final Color color = new Color(255, 255, 255);
+    //private static final Color color = new Color(255, 255, 255);
+    private final String colorWhite = "-fx-background-color: #fff;";
+    private final String colorRed = "-fx-background-color: #d93b4d;";
+    private final String colorYellow = "-fx-background-color: #ebf21b;";
     private JLabel letra;
     private  int row;
     private  int column;
@@ -26,10 +31,11 @@ public class Celda extends JButton implements MouseListener, Runnable {
     public Celda(int row, int column, JLabel letra, Celda[][] celdas) {
         this.row = row;
         this.column = column;
-        this.setBackground(color);
+        this.setStyle(colorWhite);
+        //this.setBackground(color);
         this.letra = letra;
         this.celdas = celdas;
-        this.addMouseListener(this);
+        //this.addMouseListener(this);
         this.setNeighbours();
     }
     
@@ -94,16 +100,28 @@ public class Celda extends JButton implements MouseListener, Runnable {
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        if(!e.getComponent().getBackground().equals(Color.red)){
-            e.getComponent().setBackground(Color.yellow);
+        /*
+        if(!e.getComponent().getBackground().equals(colorRed)){
+            e.getComponent().setBackground(colorYellow);
+        }*/
+        if(!this.getStyle().equals(colorRed)){
+            this.setStyle(colorYellow);
         }
+        
+        
+        
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        if(!e.getComponent().getBackground().equals(Color.red)){
-            e.getComponent().setBackground(Color.WHITE);
+        /*
+        if(!e.getComponent().getBackground().equals(colorRed)){
+            e.getComponent().setBackground(colorYellow);
+        }*/
+        if(!this.getStyle().equals(colorRed)){
+            this.setStyle(colorYellow);
         }
+        
     }
 
     @Override

@@ -25,7 +25,7 @@ public class SopaDeLetras extends javax.swing.JFrame {
 
     
     private Celda celdas[][];
-    private Stack<Celda> firstCeldaClicked = new Stack<>();
+    private final Stack<Celda> firstCeldaClicked = new Stack<>();
     private String filas;
     private String columnas;
     //private Stack<Celda> celdasRecorridas = new Stack<>();
