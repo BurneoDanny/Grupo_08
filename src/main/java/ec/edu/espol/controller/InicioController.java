@@ -1,7 +1,7 @@
 
 package ec.edu.espol.controller;
 
-import ec.edu.espol.grupo_08.App;
+import ec.edu.espol.pruebasproyectoparcial.App;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -9,40 +9,40 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 
 
-public class PantallaInicioController implements Initializable {
+public class InicioController implements Initializable {
 
     @FXML
-    private TextField filas;
+    private TextField numeroDeFilas;
     @FXML
-    private TextField columnas;
-    @FXML
-    private Button playButton;
+    private TextField numeroDeColumnas;
 
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-       
+        
     }    
 
     @FXML
-    private void playClicked(MouseEvent event) {
-        int filas1 = Integer.parseInt(filas.getText());
-        int columnas1 = Integer.parseInt(columnas.getText());
+    private void Jugar(MouseEvent event) {
+        int filas = Integer.parseInt(numeroDeFilas.getText());
+        int columnas = Integer.parseInt(numeroDeColumnas.getText());
         try{
 
-            FXMLLoader fxmlloader = App.loadFXMLLoader("juego");  
+            FXMLLoader fxmlloader = App.loadFXMLLoader("prueba");  
             App.setRoot(fxmlloader);
-            JuegoController jc = fxmlloader.getController();  
-            jc.cargar(filas1, columnas1);
+            PruebaController pc = fxmlloader.getController();  
+            pc.CargarJuego(filas, columnas);
         }
         catch(IOException ex){
             Alert a = new Alert(Alert.AlertType.ERROR, "No se pudo abrir el archivo fxml");
             a.show();
-        }  
+        } 
     }
+    
+    
     
 }

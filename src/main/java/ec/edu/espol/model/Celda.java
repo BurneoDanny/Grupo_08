@@ -1,39 +1,35 @@
 
 package ec.edu.espol.model;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.Stack;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseButton;
-import javafx.scene.layout.Background;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javafx.scene.control.Label;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.input.MouseEvent;
 
 
-public class Celda extends Button implements MouseListener, Runnable {
+
+
+
+public class Celda extends Button implements Runnable {
     public Celda up, down, left, right;
-    //private static final Color color = new Color(255, 255, 255);
     private final String colorWhite = "-fx-background-color: #fff;";
     private final String colorRed = "-fx-background-color: #d93b4d;";
     private final String colorYellow = "-fx-background-color: #ebf21b;";
-    private JLabel letra;
+    private Label label;
     private  int row;
     private  int column;
-     private final Celda celdas[][];
+    private final Celda celdas[][];
     private boolean neighboursSet = false; // QUESTION MARK ?
     
-    public Celda(int row, int column, JLabel letra, Celda[][] celdas) {
+    public Celda(int row, int column, Label label, Celda[][] celdas) {
         this.row = row;
         this.column = column;
         this.setStyle(colorWhite);
         //this.setBackground(color);
-        this.letra = letra;
+        this.label = label;
         this.celdas = celdas;
         //this.addMouseListener(this);
         this.setNeighbours();
@@ -63,8 +59,8 @@ public class Celda extends Button implements MouseListener, Runnable {
     }
     
 
-    public JLabel getLetra() {
-        return letra;
+    public Label getLabel() {
+        return label;
     }
 
     public int getRow() {
@@ -75,8 +71,8 @@ public class Celda extends Button implements MouseListener, Runnable {
         return column;
     }
     
-    public void setLetra(JLabel letra){
-        this.letra = letra;
+    public void setLabel(Label label){
+        this.label = label;
     }
 
     public void setRow(int row) {
@@ -86,54 +82,16 @@ public class Celda extends Button implements MouseListener, Runnable {
     public void setColumn(int column) {
         this.column = column;
     }
-    
+    /*
     private boolean isPainted(Color color) {
         return this.getBackground().equals(color);
+    }*/
+
+    @Override
+    public void run() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    
-    @Override
-    public void mouseClicked(MouseEvent e) { 
-    }
-    
- 
 
-    @Override
-    public void mouseEntered(MouseEvent e) {
-        /*
-        if(!e.getComponent().getBackground().equals(colorRed)){
-            e.getComponent().setBackground(colorYellow);
-        }*/
-        if(!this.getStyle().equals(colorRed)){
-            this.setStyle(colorYellow);
-        }  
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-        /*
-        if(!e.getComponent().getBackground().equals(colorRed)){
-            e.getComponent().setBackground(colorYellow);
-        }*/
-        if(!this.getStyle().equals(colorRed)){
-            this.setStyle(colorYellow);
-        }
-        
-    }
-
-    @Override
-    public void run() {   
-        
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-       
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        
-    }
     
 }

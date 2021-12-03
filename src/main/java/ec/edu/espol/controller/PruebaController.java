@@ -3,118 +3,89 @@ package ec.edu.espol.controller;
 
 import ec.edu.espol.model.Celda;
 import ec.edu.espol.model.CircularLinkedList;
-import ec.edu.espol.util.Util;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.GridLayout;
-import javafx.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import ec.edu.espol.model.CircularNode;
+import static ec.edu.espol.model.Util.readFile;
 import java.net.URL;
 import java.util.Iterator;
-import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.Stack;
 import java.util.TreeSet;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.Cell;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.RowConstraints;
-import javafx.scene.text.Text;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
+import javafx.scene.layout.StackPane;
 
-// CREA LA MATRIZ PERO CON ALGUNOS PROBLEMAS
-public class JuegoController implements Initializable {
+
+public class PruebaController implements Initializable {
 
    
- 
- 
+    private GridPane gridPane = new GridPane();
+    private final String fondoBlancoYBorde = "-fx-background-color: #fff; -fx-border-width: 1; -fx-border-color: #000; -fx-padding: 10 10 ";
+    private final String colorRed = "-fx-background-color: #d93b4d;";
     private Celda celdas[][];
     private final Stack<Celda> firstCeldaClicked = new Stack<>();
-    private int filas;
-    private int columnas;
-    private final String colorRed = "-fx-background-color: #d93b4d;";
-    private GridPane gridPanelSopa = new GridPane();
     @FXML
-    private Pane panelSopa;
-    private CircularLinkedList<Celda> listaDeCeldasPorFila = new CircularLinkedList();
-    //private CircularLinkedList<CircularLinkedList> CeldasPorColumna = new CircularLinkedList();
-    private CircularLinkedList CeldasPorColumna[];
+    private StackPane stackPane;
+    @FXML
+    private Pane paneMover;
+    @FXML
+    private TextField FilaNumero;
+    @FXML
+    private Pane paneOpciones;
+    @FXML
+    private Pane panelPrincipal;
+   
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
-        
-    }  
-    
-     public void cargar(int filas, int columnas)
-    {  
-        gridPanelSopa.alignmentProperty().setValue(Pos.CENTER);
-        panelSopa.getChildren().add(gridPanelSopa);     
-        this.filas = filas;
-        this.columnas = columnas;
-        setMatrix(filas,columnas); 
-        colocarPalabras();
-        llenarDeLetras();
-        
-        
     }
     
-     private void setMatrix(int filas, int columnas){ //10 FILAS 5 COLUMNAS         
-        celdas= new Celda[filas][columnas];
-        for (int i = 0; i< filas; i++) 
-        {
-            for (int j = 0; j < columnas; j++) {
-                JLabel letra = new JLabel("",SwingConstants.CENTER);
-                letra.setName("");
-                letra.setOpaque(true);         
-                letra.setFont(new Font("Calibri", Font.PLAIN, 14)); 
-                letra.setForeground(Color.BLACK); 
+    public void CargarJuego(int filas, int columna){
+        CrearMatriz(filas,columna);
+        llenarDeLetras();
+    
+    }
+    
+    public void CrearMatriz(int filas, int columnas){
+        panelPrincipal.getChildren().add(gridPane);
+        celdas = new Celda[filas][columnas];
+        for(int i = 0; i<filas; i++){
+            for(int j = 0; j<columnas; j++){
+                Label letra = new Label("");
+                letra.setStyle(fondoBlancoYBorde);
+                letra.setAlignment(Pos.CENTER);
                 Celda celda = new Celda(i, j,letra, celdas); 
                 celdas[i][j] = celda;
                 celda.setText(letra.getText());
                 celda.setOnAction((ActionEvent e) -> {
                     clickLetra(celda);
+                       
                 });
                 
-                gridPanelSopa.add(celdas[i][j], j, i);     
+                gridPane.add(celdas[i][j], j, i);         
             }
         }
-        
         for (int n = 0; n < filas; n++) {
             for (int m = 0; m < columnas; m++) {
                 celdas[n][m].setNeighbours();
             } 
         }
-
-    }
-     
-     // MANDO UNA K DEPENDIENDO DE LA COLUMNA QUE QUIERA CONVERTIR A LISTA CIRCULAR, CADA CELDA DE ESA COLUMNA SE INCLUYE EN UNA LISTA CIRCULAR
-    private CircularLinkedList<Celda> convertirACircularLinkedList(int k){
-        CircularLinkedList<Celda> listaDeCeldasPorColumna = new CircularLinkedList();
-        CeldasPorColumna = new CircularLinkedList[gridPanelSopa.getColumnCount()]; // ARRAY DE TAMAÑO X
-        for (int n = 0; n < filas; n++) { // SE MUEVE DE LA FILA X HASTA LA FILA Y
-           
-            listaDeCeldasPorColumna.addElement(celdas[n][k]);          
-        }
-        return listaDeCeldasPorColumna;     
     }
     
-    
-     
     private void clickLetra(Celda celda){   
         for (int i=0;i<celdas.length;i++){ // celdas.length almacena la cantidad de filas de la matriz 
             for(int j=0;j<celdas[0].length;j++){ // celdas[f].length cuando f vale cero accedemos a la cantidad de elementos de la fila cero
@@ -234,22 +205,18 @@ public class JuegoController implements Initializable {
             }         
         }      
     }
-     
-    
+
     private void colocarPalabras(){  
-        Queue<String> palabras = Util.readFile("src/main/resources/Palabras/palabras.txt");
+        String palabras[] = readFile("src/main/resources/Palabras/palabras.txt");
         Stack<String> finalWords =  new Stack();
-        while(!palabras.isEmpty()){
-            if(palabras.peek().length()<= celdas.length || palabras.peek().length()<= celdas[0].length){
-                finalWords.push(palabras.poll());         
-            }
-            else{
-                palabras.poll();
+        for(int i = 0; i < palabras.length; i++){
+            if(palabras[i].length() <= celdas.length || palabras[i].length()<= celdas[0].length){
+                finalWords.push(palabras[i]);
             }
         }
         String finalPalabras[] = new String[finalWords.size()];     
         int i = 0;
-        while(finalWords.size()>filas-1 && i < finalPalabras.length){ 
+        while(finalWords.size()>celdas.length-1 && i < finalPalabras.length){ 
            finalPalabras[i] = finalWords.pop(); 
            i++;
         }
@@ -268,18 +235,18 @@ public class JuegoController implements Initializable {
         int columnaRandom = posicionAleatoria.nextInt(celdas[0].length);  // NUMERO RANDOM DE columna
         System.out.println(palabra +" "+filaUnica);
         int i=0; // INTEGER IGUAL A CERO
-        if (columnaRandom+palabra.length()< columnas) { // COMPRUEBA QUE LA POSICION DE DONDE EMPEZARA LA PALABRA SEA MENOR QUE EL ESPACIO TOPE
+        if (columnaRandom+palabra.length()< celdas[0].length) { // COMPRUEBA QUE LA POSICION DE DONDE EMPEZARA LA PALABRA SEA MENOR QUE EL ESPACIO TOPE
             for (int j = columnaRandom; j < columnaRandom+palabra.length(); j++) {
                 celdas[filaUnica][j].setText(palabra.substring(i, i+1));
-                celdas[filaUnica][j].setLetra(new JLabel(Character.toString(palabra.charAt(i))));
-                celdas[filaUnica][j].getLetra().setName("1");
+                celdas[filaUnica][j].setLabel(new Label(Character.toString(palabra.charAt(i))));
+                
             }
         }
         else if (columnaRandom-palabra.length()>0){
             for (int j = columnaRandom; j > columnaRandom-palabra.length() ; j--) {
                 celdas[filaUnica][j].setText(Character.toString(palabra.charAt(i)));
-                celdas[filaUnica][j].setLetra(new JLabel(Character.toString(palabra.charAt(i))));
-                celdas[filaUnica][j].getLetra().setName("1");
+                celdas[filaUnica][j].setLabel(new Label(Character.toString(palabra.charAt(i))));
+         
             }
         }   
     } 
@@ -302,27 +269,24 @@ public class JuegoController implements Initializable {
         }
         return numeroRandom;
     }
- 
-    
-      
+   
+
     private void llenarDeLetras() {
         //este arreglo ayuda a poner las letras del abecedario
         String abc[]={"A","B","C","D","E","F","G","H","I","J","K","L","M","N","Ñ","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
         Random random = new Random();
-        for (int i = 0; i < filas; i++) {
-            for (int j = 0; j < columnas; j++) {
+        for (int i = 0; i < gridPane.getRowCount(); i++) {
+            for (int j = 0; j < gridPane.getColumnCount(); j++) {
                 if (celdas[i][j].getText().equals("")) { //si la casilla esta vacia pongale una letra del arreglo abc
-                    String aleatorio = abc[(int)(random.nextDouble()*abc.length-1)];
-                    /*
+                    String aleatorio = abc[(int)(random.nextDouble()*abc.length-1)]; 
                     celdas[i][j].setText(aleatorio);
-                    celdas[i][j].setLetra(new JLabel (aleatorio));
-                    */
-                    celdas[i][j].setText("F");
-                    celdas[i][j].setLetra(new JLabel ("F"));
+                    celdas[i][j].getLabel().setText(aleatorio);
+                    
+                    
                 }
             }
         }
-    }   
+    }
     
     private void ComprobarPalabra(Stack<Celda> palabra){
         while(!palabra.isEmpty()){
@@ -337,10 +301,61 @@ public class JuegoController implements Initializable {
         }  
         */
     }
-     
+
+    @FXML
+    private void Mover(MouseEvent event) {
+        paneMover.toFront();
+        
+    }
+
+    @FXML
+    private void RegresarAOpciones(MouseEvent event) {
+        paneOpciones.toFront();
+        int fila = Integer.parseInt(FilaNumero.getText())-1;
+        CircularLinkedList<Label> filaAMover = new CircularLinkedList<>(); // LISTA CIRCULAR DE LABEL
+        for (Celda celda : celdas[fila]) {
+            filaAMover.addLast(celda.getLabel());
+        } 
+        CircularLinkedList<Label> filaNueva = filaAMover.moveRight();
+        filaNueva.mostrar(); // DA OBJETO LABEL (E)
+        System.out.println("");
+        System.out.println("");
+        Stack<Label> letras = new Stack();
+        while(filaNueva.size() != 0){
+            letras.push(filaNueva.removeLast());
+        } 
+        int i = 0;
+        while(!letras.isEmpty()){
+            //Matriz[fila][i++].setText(letras.pop().getText());
+            System.out.println(letras.pop());
+        } 
+        /* 
+        //Matriz[fila].length
+        for(int i = 0; i<letras.size(); i++){
+           //System.out.println(filaNueva.get(i)); // DA CIRCULAR NODE
+            //Object n = filaNueva.get(i);
+            //System.out.println(filaNueva);
+            String letra = filaNueva.removeLast().getText();
+            System.out.println(letra);
+            Matriz[fila][i].setText(letra);
+        }  */  
     
+    }
     
+    private void ConvertirAListaCircular(){
+        
     
+    }
     
+     /*
+    private Node getNodeFromGridPane(GridPane gridPane, int col, int row) {
+    for (Node node : gridPane.getChildren()) {
+        if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
+            return node;
+        }
+    }
+        return null;
+    }*/
     
+
 }

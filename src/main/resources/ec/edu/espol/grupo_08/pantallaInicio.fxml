@@ -13,9 +13,9 @@
             <Font name="Calibri" size="18.0" />
          </font>
       </Label>
-      <TextField fx:id="filas" layoutX="173.0" layoutY="188.0" prefHeight="25.0" prefWidth="92.0" />
-      <TextField fx:id="columnas" layoutX="335.0" layoutY="188.0" prefHeight="25.0" prefWidth="92.0" />
-      <Label layoutX="295.0" layoutY="187.0" text="X">
+      <TextField fx:id="filas" layoutX="160.0" layoutY="188.0" prefHeight="25.0" prefWidth="92.0" promptText="filas" />
+      <TextField fx:id="columnas" layoutX="326.0" layoutY="188.0" prefHeight="25.0" prefWidth="92.0" promptText="columnas" />
+      <Label layoutX="284.0" layoutY="187.0" text="X">
          <font>
             <Font size="18.0" />
          </font>
